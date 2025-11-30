@@ -1,0 +1,308 @@
+# ===== .gitignore =====
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+mongo_data/
+
+# Uploads & Temp files
+uploads/
+temp/
+reports/
+*.tmp
+*.temp
+
+# ML Models (large files)
+ml_models/trained_models/*.h5
+ml_models/trained_models/*.pkl
+ml_models/trained_models/*.faiss
+ml_models/datasets/
+
+# Cache
+.cache/
+*.cache
+__pycache__/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# Node modules (if using frontend tools)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Scrapy
+.scrapy
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# Rope
+.ropeproject
+
+# mkdocs
+/site
+
+# Pyre
+.pyre/
+
+# Custom
+sensitive_data/
+api_keys/
+credentials/
+
+
+# ===== QUICK START GUIDE =====
+
+# Step 1: Create project directory structure
+mkdir -p fake-profile-detection/{app/{routes,services,scrapers,models,database/repositories,middleware,utils},templates,static/{css,js,images},ml_models/{trained_models,datasets,notebooks},tests/{fixtures},config,logs,docs,scripts,deployment/kubernetes}
+
+# Step 2: Clone or setup repository
+cd fake-profile-detection
+
+# Step 3: Create virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Step 4: Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Step 5: Create .env file
+cp .env.example .env
+# Edit .env with your configuration (API keys, MongoDB URI, etc.)
+
+# Step 6: Create necessary files
+touch app/__init__.py
+touch app/config.py
+touch app/main.py
+
+# Step 7: Initialize database
+python scripts/setup_db.py
+
+# Step 8: Download pre-trained models (optional)
+cd ml_models/trained_models
+# Download deepfake detector model (or train your own)
+wget [deepfake_model_url]
+cd ../../
+
+# Step 9: Create initial admin user (optional)
+python scripts/seed_data.py
+
+# Step 10: Run the application
+python app/main.py
+
+# Application will be available at: http://localhost:5000
+
+# ===== DEVELOPMENT COMMANDS =====
+
+# Run with hot reload
+FLASK_ENV=development FLASK_DEBUG=1 python app/main.py
+
+# Run tests
+pytest tests/ -v --cov=app
+
+# Format code
+black app/
+isort app/
+
+# Lint code
+flake8 app/
+pylint app/
+
+# Train ML models
+python ml_models/train_random_forest.py
+python ml_models/train_svm.py
+python ml_models/train_ann.py
+python ml_models/train_deepfake_detector.py
+
+# Initialize MongoDB
+mongod --dbpath ./mongo_data
+
+# Start Redis (for caching)
+redis-server
+
+# ===== PRODUCTION DEPLOYMENT =====
+
+# Using Docker
+docker-compose up -d
+
+# Using Gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 app.main:app
+
+# Using systemd (create /etc/systemd/system/fake-profile.service)
+[Unit]
+Description=Fake Profile Detection System
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/opt/fake-profile-detection
+ExecStart=/opt/fake-profile-detection/venv/bin/gunicorn -w 4 -b 0.0.0.0:5000 app.main:app
+Restart=always
+Environment="FLASK_ENV=production"
+
+[Install]
+WantedBy=multi-user.target
+
+# Then:
+sudo systemctl daemon-reload
+sudo systemctl start fake-profile
+sudo systemctl enable fake-profile
+
+# ===== MONITORING =====
+
+# Check application health
+curl http://localhost:5000/health
+
+# View logs
+tail -f logs/app.log
+
+# Monitor with Sentry
+# Configure SENTRY_DSN in .env
+
+# ===== DEBUGGING =====
+
+# Enable debug mode
+export FLASK_ENV=development
+export FLASK_DEBUG=1
+
+# Use Python debugger
+python -m pdb app/main.py
+
+# Use IPython
+from app.main import app
+app.run(debug=True)
+
+# ===== TROUBLESHOOTING =====
+
+# MongoDB connection issues
+# Make sure MongoDB is running: mongod --dbpath ./mongo_data
+
+# Redis connection issues
+# Make sure Redis is running: redis-server
+
+# Missing models
+# Train or download ML models: python ml_models/train_*.py
+
+# Port already in use
+# Change port in .env or: lsof -i :5000 && kill -9 <PID>
+
+# Permission denied errors
+# Run with proper permissions: sudo chown -R $USER:$USER .
+
+# ===== FILE STRUCTURE TREE =====
+
+# View project structure
+tree -L 3 -I '__pycache__|*.pyc|venv'
+
+# ===== ADDITIONAL RESOURCES =====
+
+# Documentation
+# See docs/README.md for comprehensive documentation
+# - API.md - API endpoint documentation
+# - SETUP.md - Detailed setup instructions
+# - ML_MODELS.md - ML model documentation
+# - SCRAPERS.md - Web scraper documentation
+# - DEPLOYMENT.md - Production deployment guide
+
+# ===== NEXT STEPS =====
+
+# 1. Configure your credentials in .env
+# 2. Set up MongoDB (local or Atlas)
+# 3. Download/train ML models
+# 4. Test API endpoints with Postman
+# 5. Run test suite: pytest tests/
+# 6. Deploy to production
