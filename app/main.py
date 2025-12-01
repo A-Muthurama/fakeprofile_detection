@@ -253,28 +253,8 @@ def create_directories():
 # ============================================
 
 if __name__ == '__main__':
-    # Create app
-    app = create_app()
-    
-    # Run development server
-    host = os.getenv('HOST', '127.0.0.1')
+    # Get port from environment variable (Render provides this)
     port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_DEBUG', True) == 'True'
     
-    print(f"""
-╔════════════════════════════════════════════════════════════╗
-║     Fake Profile Detection System - Starting Server         ║
-║════════════════════════════════════════════════════════════║
-║  URL:     http://{host}:{port}
-║  Debug:   {debug}
-║  Env:     {os.getenv('FLASK_ENV', 'development')}
-╚════════════════════════════════════════════════════════════╝
-    """)
-    
-    app.run(
-        host=host,
-        port=port,
-        debug=debug,
-        use_reloader=True,
-        use_debugger=True
-    )
+    app = create_app()
+    app.run(host='0.0.0.0', port=port)

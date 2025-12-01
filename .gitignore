@@ -1,0 +1,39 @@
+# Environment
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+temp/
+reports/
+
+# Database
+*.db
+*.sqlite3
+
+# Models (large files)
+ml_models/trained_models/*.h5
+ml_models/trained_models/*.pkl
+ml_models/datasets/
