@@ -271,3 +271,57 @@
 [2025-12-01 07:00:54] INFO in main: Analysis routes registered [OK]
 [2025-12-01 07:00:54] INFO in main: Health routes registered [OK]
 [2025-12-01 07:00:54] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:27:00] INFO in main: ========== Application Started ==========
+[2025-12-01 10:27:00] INFO in main: Environment: development
+[2025-12-01 10:27:00] INFO in main: Debug: True
+[2025-12-01 10:27:00] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:27:00] INFO in main: Health routes registered [OK]
+[2025-12-01 10:27:00] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:27:01] INFO in main: ========== Application Started ==========
+[2025-12-01 10:27:01] INFO in main: Environment: development
+[2025-12-01 10:27:01] INFO in main: Debug: True
+[2025-12-01 10:27:01] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:27:01] INFO in main: Health routes registered [OK]
+[2025-12-01 10:27:01] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:35:04] INFO in main: ========== Application Started ==========
+[2025-12-01 10:35:04] INFO in main: Environment: development
+[2025-12-01 10:35:04] INFO in main: Debug: True
+[2025-12-01 10:35:04] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:35:04] INFO in main: Health routes registered [OK]
+[2025-12-01 10:35:04] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:35:05] INFO in main: ========== Application Started ==========
+[2025-12-01 10:35:05] INFO in main: Environment: development
+[2025-12-01 10:35:05] INFO in main: Debug: True
+[2025-12-01 10:35:05] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:35:05] INFO in main: Health routes registered [OK]
+[2025-12-01 10:35:05] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: ========== Application Started ==========
+[2025-12-01 10:38:18] INFO in main: Environment: development
+[2025-12-01 10:38:18] INFO in main: Debug: True
+[2025-12-01 10:38:18] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: Health routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: Admin routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: ========== Application Started ==========
+[2025-12-01 10:38:18] INFO in main: Environment: development
+[2025-12-01 10:38:18] INFO in main: Debug: True
+[2025-12-01 10:38:18] INFO in main: Analysis routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: Health routes registered [OK]
+[2025-12-01 10:38:18] INFO in main: Admin routes registered [OK]
+[2025-12-01 20:28:14] INFO in main: ========== Application Started ==========
+[2025-12-01 20:28:14] INFO in main: Environment: development
+[2025-12-01 20:28:14] INFO in main: Debug: True
+[2025-12-01 20:28:14] INFO in main: Analysis routes registered [OK]
+[2025-12-01 20:28:14] INFO in main: Health routes registered [OK]
+[2025-12-01 20:28:14] INFO in main: Admin routes registered [OK]
+[2025-12-01 20:28:15] INFO in main: ========== Application Started ==========
+[2025-12-01 20:28:15] INFO in main: Environment: development
+[2025-12-01 20:28:15] INFO in main: Debug: True
+[2025-12-01 20:28:15] INFO in main: Analysis routes registered [OK]
+[2025-12-01 20:28:15] INFO in main: Health routes registered [OK]
+[2025-12-01 20:28:15] INFO in main: Admin routes registered [OK]
+[2025-12-01 20:28:23] INFO in main: ========== Application Started ==========
+[2025-12-01 20:28:23] INFO in main: Environment: development
+[2025-12-01 20:28:23] INFO in main: Debug: True
+[2025-12-01 20:28:23] INFO in main: Analysis routes registered [OK]
+[2025-12-01 20:28:23] INFO in main: Health routes registered [OK]
+[2025-12-01 20:28:23] INFO in main: Admin routes registered [OK]
