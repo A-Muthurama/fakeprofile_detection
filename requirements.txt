@@ -7,3 +7,4 @@ beautifulsoup4==4.12.2
 lxml==4.9.3
 instagrapi==2.0.0
 pymongo==4.4.1
+Pillow>=8.1.1
