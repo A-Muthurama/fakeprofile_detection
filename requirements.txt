@@ -8,3 +8,9 @@ lxml==4.9.3
 instagrapi==2.0.0
 pymongo==4.4.1
 Pillow>=8.1.1
+
+
+
+
+
+0f2eb3d924msh84f5f0d324f9bc6p166cd0jsn4e41a4ff5cc6
