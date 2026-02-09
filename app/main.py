@@ -16,7 +16,9 @@ from logging.handlers import RotatingFileHandler
 load_dotenv()
 
 # Add app directory to path
+# Add app directory and project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ============================================
 # Flask App Initialization
@@ -44,6 +46,13 @@ def create_app(config_name=None):
     
     # Setup logging
     setup_logging(app)
+    
+    # Initialize Database
+    try:
+        from database import init_db
+        init_db()
+    except Exception as e:
+        app.logger.error(f"Failed to initialize database: {e}")
     
     # Initialize extensions
     CORS(app, resources={
@@ -207,12 +216,16 @@ def register_error_handlers(app):
 def register_blueprints(app):
     """Register all route blueprints"""
     
+    print("DEBUG: Registering analysis_bp...")
     try:
         from routes.analysis_routes import analysis_bp
         app.register_blueprint(analysis_bp, url_prefix='/api/v1')
-        app.logger.info('Analysis routes registered [OK]')
+        print("DEBUG: Analysis routes registered [OK]")
     except Exception as e:
+        print(f"DEBUG: FAILED TO REGISTER ANALYSIS ROUTES: {e}")
         app.logger.error(f'Failed to register analysis routes: {str(e)}')
+        # Re-raise to crash if needed, but let's see print output first
+        raise e
     
     try:
         from routes.health_routes import health_bp
@@ -272,6 +285,6 @@ if __name__ == '__main__':
         host=host,
         port=port,
         debug=debug,
-        use_reloader=True,
-        use_debugger=True
+        use_reloader=False,
+        use_debugger=False
     )
