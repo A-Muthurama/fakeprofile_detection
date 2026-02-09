@@ -650,3 +650,8 @@
 [2026-02-09 08:10:54] INFO in main: Debug: True
 [2026-02-09 08:10:54] INFO in main: Health routes registered [OK]
 [2026-02-09 08:10:54] INFO in main: Admin routes registered [OK]
+[2026-02-09 08:53:20] INFO in main: ========== Application Started ==========
+[2026-02-09 08:53:20] INFO in main: Environment: development
+[2026-02-09 08:53:20] INFO in main: Debug: True
+[2026-02-09 08:53:20] INFO in main: Health routes registered [OK]
+[2026-02-09 08:53:20] INFO in main: Admin routes registered [OK]

@@ -643,39 +643,37 @@
                             ).join('');
                             ticker.innerHTML = items + items; // Dual for scroll
                         }
-                    } catch (e) { console.log("Ticker Error", e); }
-                }
+                    }
+            
+                async function submitReport() {
+                        const username = document.getElementById('r-username').value;
+                        const platform = document.getElementById('r-platform').value;
+                        const category = document.getElementById('r-category').value;
+                        const description = document.getElementById('r-desc').value;
+
+                        if (!username) return showErr("Please enter a username or URL.");
+
+                        toggleLoad(true);
+                        try {
+                            const res = await fetch('/api/v1/report', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ username, platform, category, description })
+                            });
+                            const data = await res.json();
+                            if (data.success) {
+                                alert("Report Submitted! Thank you for protecting the community.");
+                                document.getElementById('r-username').value = '';
+                                document.getElementById('r-desc').value = '';
+                                loadTicker(); // Refresh ticker
+                            } else {
+                                showErr(data.error);
+                            }
+                        } catch (e) { showErr(e.message); }
+                        finally { toggleLoad(false); }
+                    }
             </script>
 
-
-            async function submitReport() {
-            const username = document.getElementById('r-username').value;
-            const platform = document.getElementById('r-platform').value;
-            const category = document.getElementById('r-category').value;
-            const description = document.getElementById('r-desc').value;
-
-            if (!username) return showErr("Please enter a username or URL.");
-
-            toggleLoad(true);
-            try {
-            const res = await fetch('/api/v1/report', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, platform, category, description })
-            });
-            const data = await res.json();
-            if (data.success) {
-            alert("Report Submitted! Thank you for protecting the community.");
-            document.getElementById('r-username').value = '';
-            document.getElementById('r-desc').value = '';
-            loadTicker(); // Refresh ticker
-            } else {
-            showErr(data.error);
-            }
-            } catch (e) { showErr(e.message); }
-            finally { toggleLoad(false); }
-            }
-            </script>
             <!-- TAB 1: PROFILE AUDITOR -->
             <div id="tab-audit" class="tab-content active">
                 <div class="audit-card">
@@ -923,168 +921,168 @@
 
     <!-- CORE SCRIPTS -->
     <script>
-        // Database of common scams
-        const scamDB = [
-            { type: "Crypto", text: "Join my mining pool and earn 500% weekly." },
-            { type: "Romance", text: "I am a US military doctor stuck in Syria, need money for flight." },
-            { type: "Influencer", text: "Collab opportunity! DM us @brand_official pay shipping only." },
-            { type: "Phishing", text: "Copyright Violation: Your account will be suspended in 24h. Click here." },
-            { type: "Recovery", text: "I can help recover your hacked account. Message me on WhatsApp." }
-        ];
+            // Database of common scams
+            const scamDB = [
+                { type: "Crypto", text: "Join my mining pool and earn 500% weekly." },
+                { type: "Romance", text: "I am a US military doctor stuck in Syria, need money for flight." },
+                { type: "Influencer", text: "Collab opportunity! DM us @brand_official pay shipping only." },
+                { type: "Phishing", text: "Copyright Violation: Your account will be suspended in 24h. Click here." },
+                { type: "Recovery", text: "I can help recover your hacked account. Message me on WhatsApp." }
+            ];
 
-        // Search Logic
-        document.getElementById('db-search').addEventListener('input', function (e) {
-            const term = e.target.value.toLowerCase();
-            const resultsDiv = document.getElementById('db-results');
-            if (!term) {
-                resultsDiv.innerHTML = '<div style="padding:40px; text-align:center; color:var(--text-secondary); opacity:0.5;"><i class="fas fa-search" style="font-size: 2rem; margin-bottom:10px; display:block;"></i>Search for specific terms</div>';
-                return;
-            }
-            const hits = scamDB.filter(s => s.text.toLowerCase().includes(term) || s.type.toLowerCase().includes(term));
+            // Search Logic
+            document.getElementById('db-search').addEventListener('input', function (e) {
+                const term = e.target.value.toLowerCase();
+                const resultsDiv = document.getElementById('db-results');
+                if (!term) {
+                    resultsDiv.innerHTML = '<div style="padding:40px; text-align:center; color:var(--text-secondary); opacity:0.5;"><i class="fas fa-search" style="font-size: 2rem; margin-bottom:10px; display:block;"></i>Search for specific terms</div>';
+                    return;
+                }
+                const hits = scamDB.filter(s => s.text.toLowerCase().includes(term) || s.type.toLowerCase().includes(term));
 
-            if (hits.length === 0) {
-                resultsDiv.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-secondary);">No verified matches found.</div>';
-            } else {
-                resultsDiv.innerHTML = hits.map(hit => `
+                if (hits.length === 0) {
+                    resultsDiv.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-secondary);">No verified matches found.</div>';
+                } else {
+                    resultsDiv.innerHTML = hits.map(hit => `
                     <div class="db-result-item" style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
                         <span style="color:white; font-size:0.9rem;">"${hit.text}"</span>
                         <span style="background: rgba(244, 63, 94, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 800;">${hit.type}</span>
                     </div>
                 `).join('');
+                }
+            });
+
+            // Tab Management
+            function switchTab(tabId) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // Highlight button
+                const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+                if (targetBtn) targetBtn.classList.add('active');
+
+                // Show content
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+
+                document.getElementById('results').style.display = 'none';
             }
-        });
 
-        // Tab Management
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => b.classList.remove('active')); // Fixed typo from earlier
+            // --- API INTEGRATION ---
+            async function runManualAudit() {
+                const data = {
+                    followers: document.getElementById('m-followers').value,
+                    following: document.getElementById('m-following').value,
+                    posts: document.getElementById('m-posts').value,
+                    bio: document.getElementById('m-bio').value,
+                    no_pic: document.getElementById('m-no-pic').checked,
+                    digits: document.getElementById('m-digits').checked
+                };
+                if (!data.followers || !data.following) return showErr("Please enter metrics for analysis.");
 
-            // Highlight button
-            const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
-            if (targetBtn) targetBtn.classList.add('active');
+                toggleLoad(true);
+                try {
+                    const res = await fetch('/api/v1/manual', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await res.json();
+                    renderResults(result);
+                } catch (e) { showErr(e.message); }
+                finally { toggleLoad(false); }
+            }
 
-            // Show content
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
+            async function runScamCheck() {
+                const msg = document.getElementById('s-text').value;
+                if (!msg) return showErr("Input script for scanning.");
+                toggleLoad(true);
+                try {
+                    const res = await fetch('/api/v1/message', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: msg })
+                    });
+                    const result = await res.json();
+                    renderResults(result);
+                } catch (e) { showErr(e.message); }
+                finally { toggleLoad(false); }
+            }
 
-            document.getElementById('results').style.display = 'none';
-        }
+            async function runSmartScan() {
+                const url = document.getElementById('profileUrl').value;
+                if (!url) return showErr("Enter URL for live scanning.");
+                toggleLoad(true);
+                try {
+                    const res = await fetch('/api/v1/analyze', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ profile_url: url, platform: 'instagram' })
+                    });
+                    const result = await res.json();
+                    renderResults(result);
+                } catch (e) { showErr(e.message); }
+                finally { toggleLoad(false); }
+            }
 
-        // --- API INTEGRATION ---
-        async function runManualAudit() {
-            const data = {
-                followers: document.getElementById('m-followers').value,
-                following: document.getElementById('m-following').value,
-                posts: document.getElementById('m-posts').value,
-                bio: document.getElementById('m-bio').value,
-                no_pic: document.getElementById('m-no-pic').checked,
-                digits: document.getElementById('m-digits').checked
-            };
-            if (!data.followers || !data.following) return showErr("Please enter metrics for analysis.");
+            function renderResults(data) {
+                const resWrap = document.getElementById('results');
+                const resScore = document.getElementById('resScore');
+                const resRisk = document.getElementById('resRisk');
+                const resCard = document.getElementById('resultCard');
 
-            toggleLoad(true);
-            try {
-                const res = await fetch('/api/v1/manual', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                const result = await res.json();
-                renderResults(result);
-            } catch (e) { showErr(e.message); }
-            finally { toggleLoad(false); }
-        }
+                resWrap.style.display = 'block';
+                resWrap.scrollIntoView({ behavior: 'smooth' });
 
-        async function runScamCheck() {
-            const msg = document.getElementById('s-text').value;
-            if (!msg) return showErr("Input script for scanning.");
-            toggleLoad(true);
-            try {
-                const res = await fetch('/api/v1/message', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: msg })
-                });
-                const result = await res.json();
-                renderResults(result);
-            } catch (e) { showErr(e.message); }
-            finally { toggleLoad(false); }
-        }
+                document.getElementById('refId').textContent = Math.random().toString(36).substr(2, 9).toUpperCase();
+                document.getElementById('reportDate').textContent = new Date().toLocaleString();
 
-        async function runSmartScan() {
-            const url = document.getElementById('profileUrl').value;
-            if (!url) return showErr("Enter URL for live scanning.");
-            toggleLoad(true);
-            try {
-                const res = await fetch('/api/v1/analyze', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ profile_url: url, platform: 'instagram' })
-                });
-                const result = await res.json();
-                renderResults(result);
-            } catch (e) { showErr(e.message); }
-            finally { toggleLoad(false); }
-        }
+                const score = data.score.final_score !== undefined ? data.score.final_score : data.score;
+                const risk = data.score.risk_level || (score > 70 ? 'LOW RISK' : score > 40 ? 'MEDIUM RISK' : 'HIGH RISK');
 
-        function renderResults(data) {
-            const resWrap = document.getElementById('results');
-            const resScore = document.getElementById('resScore');
-            const resRisk = document.getElementById('resRisk');
-            const resCard = document.getElementById('resultCard');
+                resScore.textContent = Math.round(score);
+                resRisk.textContent = risk;
 
-            resWrap.style.display = 'block';
-            resWrap.scrollIntoView({ behavior: 'smooth' });
+                const riskColor = risk.includes('HIGH') ? 'var(--danger)' : risk.includes('MEDIUM') ? 'var(--warning)' : 'var(--success)';
+                resScore.style.color = riskColor;
+                resRisk.style.background = riskColor + '20';
+                resRisk.style.color = riskColor;
 
-            document.getElementById('refId').textContent = Math.random().toString(36).substr(2, 9).toUpperCase();
-            document.getElementById('reportDate').textContent = new Date().toLocaleString();
+                resCard.className = 'result-card ' + (risk.includes('HIGH') ? 'risk-high' : risk.includes('MEDIUM') ? 'risk-medium' : 'risk-low');
 
-            const score = data.score.final_score !== undefined ? data.score.final_score : data.score;
-            const risk = data.score.risk_level || (score > 70 ? 'LOW RISK' : score > 40 ? 'MEDIUM RISK' : 'HIGH RISK');
+                // Flags
+                const flagsList = document.getElementById('redFlagsList');
+                const flagsBox = document.getElementById('redFlagsBox');
+                if (data.score.red_flags?.length > 0) {
+                    flagsBox.style.display = 'block';
+                    flagsList.innerHTML = data.score.red_flags.map(f => `<li style="margin-bottom:10px; color:var(--text-primary); font-size:0.95rem;"><i class="fas fa-caret-right" style="color:var(--danger); margin-right:10px;"></i> ${f}</li>`).join('');
+                } else { flagsBox.style.display = 'none'; }
 
-            resScore.textContent = Math.round(score);
-            resRisk.textContent = risk;
+                // Advice
+                const adviceList = document.getElementById('adviceList');
+                const adviceBox = document.getElementById('adviceBox');
+                const adviceData = data.score.recommendations || (data.advice ? [data.advice] : []);
+                if (adviceData.length > 0) {
+                    adviceBox.style.display = 'block';
+                    adviceList.innerHTML = adviceData.map(a => `<li style="margin-bottom:10px; color:var(--text-primary); font-size:0.95rem;"><i class="fas fa-check" style="color:var(--success); margin-right:10px;"></i> ${a}</li>`).join('');
+                } else { adviceBox.style.display = 'none'; }
 
-            const riskColor = risk.includes('HIGH') ? 'var(--danger)' : risk.includes('MEDIUM') ? 'var(--warning)' : 'var(--success)';
-            resScore.style.color = riskColor;
-            resRisk.style.background = riskColor + '20';
-            resRisk.style.color = riskColor;
+                const msgBox = document.getElementById('messageAnalysis');
+                if (data.triggered_keywords) {
+                    msgBox.style.display = 'block';
+                    document.getElementById('msgText').innerHTML = `Detected category: <strong>${data.categories.join(', ')}</strong><br>Suspicious phrases detected: ${data.triggered_keywords.join(', ')}`;
+                } else { msgBox.style.display = 'none'; }
+            }
 
-            resCard.className = 'result-card ' + (risk.includes('HIGH') ? 'risk-high' : risk.includes('MEDIUM') ? 'risk-medium' : 'risk-low');
+            function toggleLoad(show) {
+                document.getElementById('loading').style.display = show ? 'block' : 'none';
+                document.getElementById('errorBox').style.display = 'none';
+                if (show) document.getElementById('results').style.display = 'none';
+            }
 
-            // Flags
-            const flagsList = document.getElementById('redFlagsList');
-            const flagsBox = document.getElementById('redFlagsBox');
-            if (data.score.red_flags?.length > 0) {
-                flagsBox.style.display = 'block';
-                flagsList.innerHTML = data.score.red_flags.map(f => `<li style="margin-bottom:10px; color:var(--text-primary); font-size:0.95rem;"><i class="fas fa-caret-right" style="color:var(--danger); margin-right:10px;"></i> ${f}</li>`).join('');
-            } else { flagsBox.style.display = 'none'; }
-
-            // Advice
-            const adviceList = document.getElementById('adviceList');
-            const adviceBox = document.getElementById('adviceBox');
-            const adviceData = data.score.recommendations || (data.advice ? [data.advice] : []);
-            if (adviceData.length > 0) {
-                adviceBox.style.display = 'block';
-                adviceList.innerHTML = adviceData.map(a => `<li style="margin-bottom:10px; color:var(--text-primary); font-size:0.95rem;"><i class="fas fa-check" style="color:var(--success); margin-right:10px;"></i> ${a}</li>`).join('');
-            } else { adviceBox.style.display = 'none'; }
-
-            const msgBox = document.getElementById('messageAnalysis');
-            if (data.triggered_keywords) {
-                msgBox.style.display = 'block';
-                document.getElementById('msgText').innerHTML = `Detected category: <strong>${data.categories.join(', ')}</strong><br>Suspicious phrases detected: ${data.triggered_keywords.join(', ')}`;
-            } else { msgBox.style.display = 'none'; }
-        }
-
-        function toggleLoad(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-            document.getElementById('errorBox').style.display = 'none';
-            if (show) document.getElementById('results').style.display = 'none';
-        }
-
-        function showErr(m) {
-            const eb = document.getElementById('errorBox');
-            eb.style.display = 'block';
-            eb.textContent = "Error: " + m;
-            window.scrollTo({ top: eb.offsetTop - 100, behavior: 'smooth' });
-        }
+            function showErr(m) {
+                const eb = document.getElementById('errorBox');
+                eb.style.display = 'block';
+                eb.textContent = "Error: " + m;
+                window.scrollTo({ top: eb.offsetTop - 100, behavior: 'smooth' });
+            }
     </script>
 
     <style>
